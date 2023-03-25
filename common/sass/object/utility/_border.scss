@@ -1,0 +1,133 @@
+// border
+// ============================================
+.bd-none {
+    border: 0;
+}
+
+.bd {
+    border-width: 1px;
+    border-style: solid;
+    @include md {
+        border-width: 8px;
+    }
+}
+
+.bd-top {
+    border-top-width: 4px;
+    border-top-style: solid;
+    @include lg {
+        border-top-width: 6px;
+    }
+}
+
+.bd-style-solid {
+    border-style: solid;
+}
+
+.bd-style-dotted {
+    border-style: dotted;
+}
+
+.bd-style-dashed {
+    border-style: dashed;
+}
+.bd-fifth-1 {
+    border: .1rem solid $fifth;
+}
+.bd-top-fifth-1 {
+    border-top: .1rem solid $fifth;
+}
+.bd-left-fifth-1 {
+    border-left: .1rem solid $fifth;
+}
+.bd-left-fifth-2 {
+    border-left: .2rem solid $fifth;
+}
+@include lg {
+    .bd-lg-none {
+        border: 0;
+    }
+    .bd-style-lg-solid {
+        border-style: solid;
+    } 
+    .bd-width-lg-1 {
+        border-width: .1rem;
+    }
+
+    .bd-bottom-width-lg-1 {
+        border-bottom-style: solid;
+        border-bottom-width: .1rem;
+    }
+
+    .bd-width-lg-10 {
+        border-width: 1rem;
+    }
+
+    .bd-lg-primary {
+        border: solid .1rem $primary
+    }
+}
+
+.bd-radius-1 {
+    border-radius: .1rem;
+}
+
+.bd-radius-2 {
+    border-radius: .2rem;
+}
+
+.bd-radius-3 {
+    border-radius: .3rem;
+}
+
+.bd-radius-4 {
+    border-radius: .4rem;
+}
+
+.bd-radius-5 {
+    border-radius: .5rem;
+}
+
+@include lg {
+    .bd-radius-lg-1 {
+        border-radius: .1rem;
+    }
+
+    .bd-radius-lg-2 {
+        border-radius: .2rem;
+    }
+
+    .bd-radius-lg-3 {
+        border-radius: .3rem;
+    }
+
+    .bd-radius-lg-4 {
+        border-radius: .4rem;
+    }
+
+    .bd-radius-lg-5 {
+        border-radius: .5rem;
+    }
+}
+.table-wrap {
+    > .elementor-container {
+        padding: 0 1rem;
+        @include md {
+            position: relative;
+            &::before {
+                position: absolute;
+                content: '';
+                width: calc(100% - 2rem);
+                height: .1rem;
+                left: 1rem;
+                bottom: 0;
+                background-color: #E0E0E0;
+            }
+        }
+    }
+    .last-table > .elementor-container {
+        @include md {
+            min-height: 11rem;
+        }
+    }
+}

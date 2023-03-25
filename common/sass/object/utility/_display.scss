@@ -1,0 +1,46 @@
+// display
+// ============================================
+
+.d-none {
+    display: none;
+}
+
+.d-block {
+    display: block;
+}
+
+.d-inline-block {
+    display: inline-block;
+}
+
+@include md {
+    .d-md-none {
+        display: none !important;
+    }
+    
+    .d-md-block {
+        display: block;
+    }
+
+    .d-md-inline {
+        display: inline;
+    }
+    
+    .d-md-inline-block {
+        display: inline-block;
+    }
+}
+
+@include lg {
+    .d-lg-none {
+        display: none;
+    }
+    
+    .d-lg-block {
+        display: block;
+    }
+    
+    .d-lg-inline-block {
+        display: inline-block;
+    }
+}

@@ -1,0 +1,378 @@
+// font-size
+// ============================================
+.fs-base {
+    font-size: calc(10/375*100vw);
+    @include lg {
+        font-size: 10px;
+    }
+}
+
+
+.fs-100 {
+    font-size: 10rem;
+}
+.fs-90 {
+    font-size: 9rem;
+}
+.fs-87 {
+    font-size: 8.7rem;
+}
+.fs-72 {
+    font-size: 7.2rem;
+}
+.fs-70 {
+    font-size: 7rem;
+}
+.fs-67 {
+    font-size: 6.7rem;
+}
+.fs-66 {
+    font-size: 6.6rem;
+}
+.fs-60 {
+    font-size: 6rem;
+}
+.fs-50 {
+    font-size: 5rem;
+}
+.fs-48 {
+    font-size: 4.8rem;
+}
+.fs-44 {
+    font-size: 4.4rem;
+}
+.fs-40 {
+    font-size: 4rem;
+}
+.fs-38 {
+    font-size: 3.8rem;
+}
+.fs-36 {
+    font-size: 3.6rem;
+}
+.fs-34 {
+    font-size: 3.4rem;
+}
+.fs-32 {
+    font-size: 3.2rem;
+}
+.fs-30 {
+    font-size: 3rem;
+}
+.fs-28 {
+    font-size: 2.8rem;
+}
+.fs-27 {
+    font-size: 2.7rem;
+}
+.fs-26 {
+    font-size: 2.6rem;
+}
+.fs-24 {
+    font-size: 2.4rem;
+}
+
+.fs-23 {
+    font-size: 2.3rem;
+}
+
+.fs-22 {
+    font-size: 2.2rem;
+}
+
+.fs-21 {
+    font-size: 2.1rem;
+}
+
+.fs-20 {
+    font-size: 2rem;
+}
+
+.fs-19 {
+    font-size: 1.9rem;
+}
+
+.fs-18 {
+    font-size: 1.8rem;
+}
+
+.fs-17 {
+    font-size: 1.7rem;
+}
+
+.fs-16 {
+    font-size: 1.6rem;
+}
+
+.fs-15 {
+    font-size: 1.5rem;
+}
+
+.fs-14 {
+    font-size: 1.4rem;
+}
+
+.fs-13 {
+    font-size: 1.3rem;
+}
+
+.fs-12 {
+    font-size: 1.2rem;
+}
+
+.fs-11 {
+    font-size: 1.1rem;
+}
+
+.fs-10 {
+    font-size: 1rem;
+}
+
+.fs-copyright {
+    font-size: .9rem;
+}
+
+@include lg {
+    .fs-lg-100 {
+        font-size: 10rem;
+    }
+    .fs-lg-90 {
+        font-size: 9rem;
+    }
+    .fs-lg-87 {
+        font-size: 8.7rem;
+    }
+    .fs-lg-72 {
+        font-size: 7.2rem;
+    }
+    .fs-lg-70 {
+        font-size: 7rem;
+    }
+    .fs-lg-50 {
+        font-size: 5rem;
+    }
+    .fs-lg-48 {
+        font-size: 4.8rem;
+    }
+    .fs-lg-44 {
+        font-size: 4.4rem;
+    }
+    .fs-lg-38 {
+        font-size: 3.8rem;
+    }
+    .fs-lg-35 {
+        font-size: 3.5rem;
+    }
+    .fs-lg-33 {
+        font-size: 3.3rem;
+    }
+    .fs-lg-32 {
+        font-size: 3.2rem;
+    }
+    .fs-lg-30 {
+        font-size: 3rem;
+    }
+    .fs-lg-28 {
+        font-size: 2.8rem;
+    }
+    .fs-lg-26 {
+        font-size: 2.6rem;
+    }
+    .fs-lg-24 {
+        font-size: 2.4rem;
+    }
+    .fs-lg-23 {
+        font-size: 2.3rem;
+    }
+    .fs-lg-22 {
+        font-size: 2.2rem;
+    }
+    .fs-lg-21 {
+        font-size: 2.1rem;
+    }
+    .fs-lg-20 {
+        font-size: 2rem;
+    }
+    .fs-lg-19 {
+        font-size: 1.9rem;
+    }
+    .fs-lg-18 {
+        font-size: 1.8rem;
+    }
+    .fs-lg-16 {
+        font-size: 1.6rem;
+    }
+    .fs-lg-15 {
+        font-size: 1.5rem;
+    }
+    .fs-lg-14 {
+        font-size: 1.4rem;
+    }
+    .fs-lg-12 {
+        font-size: 1.2rem;
+    }
+    .fs-copyright {
+        font-size: 1rem;
+    }
+}
+
+// font-style
+// ============================================
+.font-style-italic {
+    font-style: italic;
+}
+
+// line-height
+// ============================================
+.lh-100 {
+    line-height: 100%;
+}
+
+.lh-110 {
+    line-height: 110%;
+}
+
+.lh-120 {
+    line-height: 120%;
+}
+
+.lh-130 {
+    line-height: 130%;
+}
+
+.lh-140 {
+    line-height: 140%;
+}
+
+.lh-150 {
+    line-height: 150%;
+}
+
+.lh-160 {
+    line-height: 160%;
+}
+
+.lh-170 {
+    line-height: 170%;
+}
+
+.lh-180 {
+    line-height: 180%;
+}
+
+.lh-base {
+    line-height: 187%;
+}
+
+// text-align
+// ============================================
+.text-justify {
+    text-align: justify;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+@include md {
+    .text-md-center {
+        text-align: center;
+    }
+    .text-md-left {
+        text-align: left;
+    }
+    .text-md-right {
+        text-align: right;
+    }
+}
+
+@include lg {
+    .text-lg-center {
+        text-align: center;
+    }
+    .text-lg-left {
+        text-align: left;
+    }
+    .text-lg-right {
+        text-align: right;
+    }
+}
+
+// text-align
+// ============================================
+.fw-regular {
+    font-weight: 400;
+}
+
+.fw-medium {
+    font-weight: 500;
+}
+
+.fw-bold , strong, b {
+    font-weight: 700;
+}
+
+.fw-black {
+    font-weight: 900;
+}
+
+@include lg {
+    .fw-lg-regular {
+        font-weight: 400;
+    }
+    
+    .fw-lg-medium {
+        font-weight: 500;
+    }
+    
+    .fw-lg-bold {
+        font-weight: 700;
+    }
+    
+    .fw-lg-black {
+        font-weight: 900;
+    }   
+}
+
+// letter-spacing
+// ============================================
+.lspacing-0 {
+    letter-spacing: 0;
+}
+
+.lspacing-10 {
+    letter-spacing: 0.1rem;
+}
+
+.lspacing-15 {
+    letter-spacing: 0.15rem;
+}
+
+.lspacing-20 {
+    letter-spacing: 0.2rem;
+}
+
+.lspacing-50 {
+    letter-spacing: 0.5rem;
+}
+
+// white-space
+// ============================================
+.text-nowrap {
+    white-space: nowrap;
+}
+
+.text-normal {
+    white-space: normal;
+}
+.text-uppercase {
+    text-transform: uppercase;
+}

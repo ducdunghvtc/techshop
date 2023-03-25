@@ -1,0 +1,96 @@
+// width
+// ============================================
+.w-100 {
+    width: 100%;
+}
+.w-24 {
+    width: 2.4rem;
+}
+.w-40 {
+    width: 4rem;
+}
+//max-width
+@include lg {
+    .mw-lg-800 {
+        max-width: 80rem;
+    }
+    .mw-lg-900 {
+        max-width: 90rem;
+    }
+    .mw-lg-1100 {
+        max-width: 110rem;
+    }
+}
+
+//min-width
+.miw-200 {
+    min-width: 20rem;
+}
+
+// col *
+// =======================
+.col {
+    width: 100%;
+}
+.col-6 {
+    width: 50%;
+}
+.col-4 {
+    width: 33.333333%;
+}
+@include lg {
+    .col-lg-1 {
+        width: 8.333333%;
+    }
+    .col-lg-2 {
+        width: 16.666667%;
+    }
+    .col-lg-3 {
+        width: 25%;
+    }
+    .col-lg-4 {
+        width: 33.333333%;
+    }
+    .col-lg-5 {
+        width: 41.666667%;
+    }
+    .col-lg-6 {
+        width: 50%;
+    }
+    .col-lg-7 {
+        width: 58.333333%;
+    }
+    .col-lg-8 {
+        width: 66.666667%;
+    }
+    .col-lg-9 {
+        width: 75%;
+    }
+    .col-lg-10 {
+        width: 83.333333%;
+    }
+    .col-lg-11 {
+        width: 91.666667%;
+    }
+    .col-lg-12 {
+        width: 100%;
+    }
+}
+
+.container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    @include lg {
+        max-width: 114.2rem;
+    }
+    &.w-full {
+        max-width: 100%;
+    }
+    &.mw-1300 {
+        max-width: 130rem;
+    }
+    &.mw-1000 {
+        max-width: 100rem;
+    }
+}

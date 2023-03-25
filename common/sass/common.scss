@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@500;600;700;900&display=swap');
+// foundation
+@import 'foundation/reset';
+@import 'foundation/variables';
+@import 'foundation/mixin';
+@import 'foundation/base';
+@import 'foundation/font';
+// object
+// -utility
+@import 'object/utility/color';
+@import 'object/utility/width';
+@import 'object/utility/margin';
+@import 'object/utility/padding';
+@import 'object/utility/display';
+@import 'object/utility/flex';
+@import 'object/utility/border';

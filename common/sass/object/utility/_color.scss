@@ -1,0 +1,131 @@
+/* color */
+/* ============================================ */
+
+.text-primary {
+    color: $primary;
+}
+
+.text-secondary {
+    color: $secondary;
+}
+
+.text-third {
+    color: $third;
+}
+
+.text-fourth {
+    color: $fourth;
+}
+.text-fifth {
+    color: $fifth;
+}
+.text-base {
+    color: $base;
+}
+
+.text-link {
+    color: $link;
+}
+
+.text-danger {
+    color: $danger;
+}
+
+.text-light {
+    color: $light;
+}
+
+@include lg {
+    .text-lg-primary {
+        color: $primary;
+    }
+    .text-lg-secondary {
+        color: $secondary;
+    }
+    .text-lg-third {
+        color: $third;
+    }
+    .text-lg-fourth {
+        color: $fourth;
+    }
+    .text-lg-base {
+        color: $base;
+    }
+    .text-lg-link {
+        color: $link;
+    }
+    .text-lg-danger {
+        color: $danger;
+    }
+    .text-lg-light {
+        color: $light;
+    }
+}
+
+
+/* background-color */
+
+
+/* ============================================ */
+
+.bg-primary {
+    background-color: $primary;
+}
+
+.bg-secondary {
+    background-color: $secondary;
+}
+
+.bg-third {
+    background-color: $third;
+}
+
+.bg-fourth {
+    background-color: $fourth;
+}
+.bg-fifth {
+    background-color: $fifth;
+}
+.bg-six {
+    background-color: $sixth;
+}
+.bg-base {
+    background-color: $base;
+}
+
+.bg-link {
+    background-color: $link;
+}
+
+.bg-danger {
+    background-color: $danger;
+}
+
+.bg-light {
+    background-color: $light;
+}
+
+/* border */
+
+
+/* ============================================ */
+
+.border-primary {
+    border-color: $primary;
+}
+
+.border-secondary {
+    border-color: $secondary;
+}
+
+.border-third {
+    border-color: $third;
+}
+
+.border-fourth {
+    border-color: $fourth;
+}
+
+.border-base {
+    border-color: $base;
+}

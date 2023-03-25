@@ -1,0 +1,23 @@
+@charset "UTF-8";
+// unique > display > position > z-index > pos > width > margin > padding > font > background > border
+// font・・・family > size > weight > color > align > line-height > letter-spacing >  white-space
+// foundation
+@import 'foundation/variables';
+@import 'foundation/mixin';
+
+// layout
+@import 'layout/header';
+@import 'layout/footer';
+@import 'layout/main';
+
+// -component
+@import 'object/component/breadcrumb';
+@import 'object/component/heading';
+@import 'object/component/button';
+@import 'object/component/list';
+@import 'object/component/form';
+@import 'object/component/modal';
+// -page
+@import 'object/page/top';
+@import 'object/page/product';
+@import 'object/page/equipment';

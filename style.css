@@ -1,0 +1,17 @@
+/*
+Theme Name: Template
+Author: bontd
+Description: 
+*/
+
+.footer .menu-item .sub-menu .menu-item {
+	font-weight: 100!important;
+}
+.footer .menu-item .sub-menu .menu-item a {
+	color: #E1E1E1;
+}
+
+@media (min-width: 969px)
+.menu-footer-menu-en-container, .menu-footer-menu-vi-container {
+    padding-left: 9.5rem;
+}

@@ -1,0 +1,88 @@
+// button
+// ==========================
+.backtotop {
+    width: 4.7rem;
+    height: 4.7rem;
+    display: none;
+    background: $primary;
+    color: $light;
+    border: 0;
+    padding: 0;
+    position: fixed;
+    bottom: 28rem;
+    right: 1.5rem;
+    cursor: pointer;
+    z-index: 9;
+    &:hover {
+        opacity: .7;
+    }
+    &.nologin {
+        bottom: 90px;
+        @include lg {
+            bottom: 8rem;
+        }
+    }
+}
+.btn {
+    background-color: #FF5200;
+    color: #fff;
+    font-size: 1.4rem;
+    font-weight: 500;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 12rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    margin-top: 1.5rem;
+    @include md {
+        min-width: 16rem;
+        font-size: 1.6rem;
+    }
+}
+.pagination {
+    &_text {
+        color: $primary;
+        display: inline-block;
+        min-width: 10.5rem;
+        padding: 0.75rem 0.5rem;
+        border: solid thin #c4c4c4;
+        border-right: none;
+    }
+    .page-numbers {
+      width: 3.4rem;
+      height: 3.4rem;
+      font-size: 1.8rem;
+    }
+    a.page-numbers {
+        padding: 0.75rem 0;
+        color: $light;
+        background-color: #0F70A9;
+        line-height: 1;
+        text-align: center;      
+        border-bottom: 1px solid #0F70A9;  
+        margin-right: 1rem;    
+        &.next {
+          padding: 0.65rem 0;
+          font-size: 2rem;
+        }
+        &.prev  {
+          font-size: 2rem;
+          margin-right: 1rem;
+          padding: 0.65rem 0;
+        }
+      }
+    span.page-numbers {
+        padding: 0.75rem 0;      
+        
+        line-height: 1;
+        text-align: center;
+        border-right: none;
+        display: inline-block;
+        border: solid thin #0F70A9;
+        &:not(.dots){
+          color: $primary;
+          margin-right: 1rem;
+        }
+    }
+  }

@@ -1,0 +1,22 @@
+.equipment {
+    a {
+        width: 100%;
+        margin: 0 0 2rem;
+        @include md {
+            margin: 0 1rem 2rem;
+            width: calc(100% / 3 - 2rem);
+        }
+        &:hover {
+            opacity: 1;
+            .post-title {
+                color: #FF7A00;
+            }
+        }
+    }
+    figure {
+        height: 20rem;
+        overflow: hidden;
+        line-height: 0;
+        border-radius: 1rem;
+    }
+}

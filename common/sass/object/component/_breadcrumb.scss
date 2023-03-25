@@ -1,0 +1,26 @@
+// breadcrumb
+// ============================================
+
+.breadcrumb {
+    @include flexbox(flex, flex-start, flex-start, wrap);
+    list-style: none;
+    li {
+        font-size: 1.2rem;
+       &.active {
+           color: $primary;
+       }
+       a {
+           color: $base;
+       }
+    }
+    li::after {
+        content: "/";
+        width: 2.5em;
+        padding: 0 0.7em;
+    }
+    li:last-child::after {
+        display: none;
+        width: 0;
+        padding: 0;
+    }
+}

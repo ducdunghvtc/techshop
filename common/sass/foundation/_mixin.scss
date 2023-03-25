@@ -1,0 +1,57 @@
+@mixin xs {
+    @media (max-width: ($xs)) {
+        @content;
+    }
+}
+  
+@mixin md {
+    @media (min-width: ($md)) {
+        @content;
+    }
+}
+
+  
+@mixin mdm {
+    @media (max-width: ($mdm)) {
+        @content;
+    }
+}
+
+@mixin lgm {
+    @media (max-width: ($lgm)) {
+        @content;
+    }
+}
+
+@mixin lg {
+    @media (min-width: ($lg)) {
+        @content;
+    }
+}
+  
+@mixin xl {
+    @media (min-width: ($xl)) {
+        @content;
+    }
+}
+
+@mixin xxl {
+    @media (min-width: ($xxl)) {
+        @content;
+    }
+}
+
+@mixin flexbox($flex, $align, $justify, $wrap) {
+    display: $flex;
+    align-items: $align;
+    justify-content: $justify;
+    flex-wrap: $wrap;
+}
+
+
+@mixin center-pos {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50% , -50%);
+}

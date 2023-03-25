@@ -1,0 +1,181 @@
+// footer
+// =====================
+.footer {
+    .service {
+        &-slider {
+            width: 100%;
+            img {
+                width: 7rem;
+            }
+        }
+        &-items {
+            margin: 1rem;
+            @include lg {
+                margin: 0.25rem;
+            }
+        }
+    }
+    &-main {
+        margin-top: -8.25rem;
+    }
+    .contact-nav {
+        ul {
+            display: block;
+            word-break: break-word;
+            li {
+                @include lgm {
+                    margin-top: 0;
+                }
+               +li {
+                margin-top: 1rem;
+               } 
+            }
+            a {
+                color: $light;
+                font-size: 1.4rem;
+                @include lg {
+                    align-items: start !important;
+                    font-size: 1.6rem;
+                    line-height: 2.4rem;
+                }
+            }
+            img {
+                width: 1.6rem;
+                display: inline-block;
+                margin: 0 .7rem 0 0;
+                @include lg {
+                    margin: .4rem .5rem 0 0;
+                }
+            }
+        }
+    }
+    .menu {
+        list-style: none;
+        @include md {
+            width: 100%;
+            margin: 0;
+        }
+        .menu-item-has-children {
+            font-weight: 700;
+        }
+        &-item {
+            color: #fff;
+            text-transform: uppercase;
+            @include md {
+                font-size: 1.6rem;
+            }
+            & + .menu-item {
+                margin-top: 1rem;
+            }
+            .sub-menu {
+                list-style: none;
+                margin-top: 1.7rem;
+                .menu-item {
+                    width: 100%;
+                    font-weight: 400;
+                    margin: 0;
+                    color: #fff;
+                    font-size: 1.4rem;
+                    @include md {
+                        font-size: 1.6rem;
+                    }
+                    a span {
+                        color: #4A90E2;
+                    }
+                    & + .menu-item {
+                        margin-top: 0.5rem;
+                    }
+                }
+            }
+        }
+
+    }
+    &-logo {
+        margin: 0 auto;
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 4rem;
+        @include lg {
+            justify-content: start;
+            margin: 0;
+        }
+        a {
+            width: 3.6rem;
+            display: block;
+            @include lg {
+                width: 6rem;
+            }
+        }
+        img {
+            height: auto;
+        }
+    }
+    .contact-nav {
+        width: 42.5%;
+    }
+    &-logo, .contact-nav {
+        @include lg {
+            width: calc(40%/2);
+        }
+    }
+    
+    .menu-footer-menu-container {
+        width: 42.5%;
+        @include lg {
+            width: 15%;
+        }
+    }
+    #mailpoet_form_1 {
+        @include lgm {
+            margin-top: 3rem;
+        }
+        .email {
+            margin-top: 3.5rem;
+            width: calc(100% - 13rem);
+            float: left;
+            input {
+                background-color: transparent;
+                border: .1rem solid $sixth;
+                border-radius: 0 !important;
+                border-right: 0;
+                padding: 1.4rem !important;
+                color: #fff;
+                font-size: 1.4rem !important;
+                height: 5rem;
+                @include lg {
+                    font-size: 1.6rem !important;
+                    height: auto;
+                }
+                &:focus {
+                    outline: none;
+                }
+            }
+        }
+        @include lg {
+            width: 30% !important;
+        }
+        .btn-wrap {
+            margin-top: 3.5rem;
+            width: 13rem;
+            float: right;
+            input {
+                border-radius: 0 !important;
+                background-color: #5E72EB;
+                color: $light;
+                text-transform: uppercase;
+                width: 100%;
+                padding: 1.4rem !important;
+                font-size: 1.4rem !important;
+                cursor: pointer;
+                appearance: none;
+                -webkit-appearance: none;
+                height: 5rem;
+                @include lg {
+                    height: auto;
+                    padding: 1.3rem !important;
+                    font-size: 1.6rem !important;
+                }
+            }
+        }
+    }
+}
