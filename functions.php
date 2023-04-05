@@ -428,78 +428,359 @@ function add_percentage_to_sale_badge( $html, $post, $product ) {
 	
 }
 
-add_action('wp_ajax_nopriv_loadmore', 'get_post_loadmore');
-function get_post_loadmore() {
-    $offset = isset($_POST['offset']) ? (int)$_POST['offset'] : 0; // lấy dữ liệu phái client gởi
-    $getposts = new WP_query(); $getposts->query('post_type=product,post_status=publish&posts_per_page=5&offset='.$offset);
-	global $product;
-    if( $getposts->have_posts() ): while ($getposts->have_posts()) : $getposts->the_post(); ?>
-    	<div class="product-items position-relative bd-fifth-1">
-			<div class="tag d-flex">
-				<?php if($product->is_on_sale()) : ?>
-					<div class="price-sale w-40 bg-secondary d-flex align-items-center justify-content-center text-light fs-12">-<?php echo percentSale($product->get_regular_price(),$product->get_sale_price()); ?>%</div>
-				<?php endif; ?>
-				<?php
-					echo hk_product_new_badge();
-				?>
-				<?php if ( ! $product->is_in_stock() ) : ?>
-					<div class="stock-tag px-0h bg-six d-flex align-items-center justify-content-center text-fifth fs-12">Out of stock</div>
-				<?php endif;?>
-			</div>
-			<a class="d-block" href="<?php the_permalink(); ?>">
-				<picture class="product-image d-flex align-items-center justify-content-center">
-					<img src="<?php echo get_the_post_thumbnail_url();?>" alt="<?php the_title();?>">
-				</picture>
-			</a>
-			<div class="product-info p-2">
-				<p class="product-category text-third fs-lg-16 fw-bold text-uppercase">
-					<?php 
-						$cat = array(
-							'taxonomy'      => 'product_cat',
-							'hide_empty' => true,
-							'order'         => 'desc'
-						);
-						$categories = get_the_terms( $product->get_id(), 'product_cat' );
-						foreach($categories as $category) :
-					?>
-					<a href="<?php echo get_term_link($category->slug, 'product_cat'); ?>">
-						<?php 
-							echo $category->name;
-							endforeach;
-						?>
-					</a>
-				</p>
-				
-				<p class="product-title fs-lg-16 mt-0h mb-1h text-fourth"><a href="<?php the_permalink(); ?>"><?php the_title();?></a></p>
-				<p class="product-price mt-0h mb-1h text-fourth"><?php echo $product->get_price_html();?></p>
-			</div>
-			<div class="product-bottom w-100 d-flex align-item-center justify-content-end">
-				<?php
-				if ( ! wc_review_ratings_enabled() ) {
-					return;
+// display an 'Out of Stock' label on archive pages
+add_action( 'woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_stock', 10 );
+function woocommerce_template_loop_stock() {
+    global $product;
+    if ( ! $product->managing_stock() && ! $product->is_in_stock() )
+        echo '<p class="stock out-of-stock">Out of Stock</p>';
+}
+
+add_action('woocommerce_after_shop_loop_item_title','change_loop_ratings_location', 2 );
+function change_loop_ratings_location(){
+    remove_action('woocommerce_after_shop_loop_item_title','woocommerce_template_loop_rating', 5 );
+    add_action('woocommerce_after_shop_loop_item','woocommerce_template_loop_rating', 8 );
+}
+
+
+
+// BAT TRINH SOAN THAO CU CUA WORDPRESS
+add_filter('use_block_editor_for_post', '__return_false');
+
+// Disables the block editor from managing widgets in the Gutenberg plugin.
+add_filter( 'gutenberg_use_widgets_block_editor', '__return_false' );
+// Disables the block editor from managing widgets.
+add_filter( 'use_widgets_block_editor', '__return_false' );
+	
+
+
+// filter products
+
+add_action('wp_ajax_myfilter', 'saan_filter_function'); // wp_ajax_{ACTION HERE} 
+add_action('wp_ajax_nopriv_myfilter', 'saan_filter_function');
+
+function saan_filter_function(){
+	//wp_quick_view();
+	$args = array(
+		'post_type' => 'product',
+		'posts_per_page' => 9,
+	);
+
+	$choices = $_POST['choices'];
+	$args['tax_query'] = array( 'relation' => 'AND' );
+	$all_terms = array();
+	$all_tags = array();
+	$all_colors = array();
+	
+	$regions = get_terms( array( 'taxonomy' => 'product_cat' ) );
+	$colors = get_terms( array( 'taxonomy' => 'pa_colors' ) );
+	$tags = get_terms( array( 'taxonomy' => 'product_tag' ) );
+	
+
+	foreach($choices as $key => $value){
+
+		if(count($value)){
+			foreach ($value as $inKey => $inValue) {
+				$args[] = array( 'key' => $key, 'value' => $inValue, 'compare' => '=' );
+			}
+		}
+	}
+
+	// for taxonomies / categories
+	if( $regions ) {
+		foreach( $regions as $region ) {
+			if( $region->parent == 0 ) {
+				if( isset( $_POST['region_' . $region->term_id ] ) && $_POST['region_' . $region->term_id] == 'on' ){
+					$all_terms[] = $region->term_id;
+					}
+				foreach( $regions as $subcategory ) {
+					if($subcategory->parent == $region->term_id) {
+						if( isset( $_POST['region_' . $subcategory->term_id ] ) && $_POST['region_' . $subcategory->term_id] == 'on' ){
+							$all_terms[] = $subcategory->term_id;
+						}
+					}
 				}
-				$rating_count = $product->get_rating_count();
-				$review_count = $product->get_review_count();
-				$average      = $product->get_average_rating();
+			}
+		}
+		
+		if( count( $all_terms ) > 0 ) {
+			$args['tax_query'][] = array(
+				array(
+					'taxonomy' => 'product_cat',
+					'field' => 'id',
+					'terms'=> $all_terms,
+				)
+			);
+		}
+	}
 
-				if ( $rating_count > 0 ) : ?>
 
-					<div class="woocommerce-product-rating">
-						<?php echo wc_get_rating_html( $average, $rating_count ); // WPCS: XSS ok. ?>
-						<?php if ( comments_open() ) : ?>
-							<?php //phpcs:disable ?>
-							<a href="#reviews" class="woocommerce-review-link" rel="nofollow">(<?php printf( _n( '%s', '%s', $review_count, 'woocommerce' ), '<span class="count">' . esc_html( $review_count ) . '</span>' ); ?>)</a>
-							<?php // phpcs:enable ?>
-						<?php endif ?>
-					</div>
-				
-				<?php endif; ?>
-				<?php echo do_shortcode('[wc_quick_buy]'); ?>
-				<a class="btn-add-cart lh-0 p-1h bd-top-fifth-1 bd-left-fifth-1 d-inline-flex align-item-center justify-content-center" href="<?php bloginfo('url') ?>?add-to-cart=<?php the_ID(); ?>">
-					<img src="<?php echo get_template_directory_uri(); ?>/common/images/bxs-cart.svg" alt="add to cart">
+	// for taxonomies / color
+	if( $colors ) {
+		foreach( $colors as $color ) {
+			if( isset( $_POST['color_' . $color->term_id ] ) && $_POST['color_' . $color->term_id] == 'on' )
+				$all_colors[] = $color->term_id;
+		}
+		
+		if( count( $all_colors ) > 0 ) {
+			$args['tax_query'][] = array(
+				array(
+					'taxonomy' => 'pa_colors',
+					'field' => 'id',
+					'terms'=> $all_colors,
+				)
+			);
+		}
+	}
+	
+	// for taxonomies / tags
+	if( $tags ) {
+		foreach( $tags as $tag ) {
+			if( $tag->parent == 0 ) {
+				if( isset( $_POST['tag_' . $tag->term_id ] ) && $_POST['tag_' . $tag->term_id] == 'on' ){
+					$all_tags[] = $tag->term_id;
+				}
+			}
+		}
+		
+		if( count( $all_tags ) > 0 ) {
+			$args['tax_query'][] = array(
+				array(
+					'taxonomy' => 'product_tag',
+					'field' => 'id',
+					'terms'=> $all_tags,
+				)
+			);
+		}
+	}
+		
+	
+	// create $args['meta_query'] array if one of the following fields is filled
+	if( isset( $_POST['price_min'] ) && $_POST['price_min'] || isset( $_POST['price_max'] ) && $_POST['price_max'] || isset( $_POST['featured_image'] ) && $_POST['featured_image'] == 'on' )
+		$args['meta_query'] = array( 'relation'=>'AND' ); // AND means that all conditions of meta_query should be true
+ 
+	// if both minimum price and maximum price are specified we will use BETWEEN comparison
+	if( isset( $_POST['price_min'] ) && $_POST['price_min'] && isset( $_POST['price_max'] ) && $_POST['price_max'] ) {
+		$args['meta_query'][] = array(
+			'key' => '_price',
+			'value' => array( $_POST['price_min'], $_POST['price_max'] ),
+			'type' => 'numeric',
+			'compare' => 'between'
+		);
+	} else {
+		// if only min price is set
+		if( isset( $_POST['price_min'] ) && $_POST['price_min'] )
+			$args['meta_query'][] = array(
+				'key' => '_price',
+				'value' => $_POST['price_min'],
+				'type' => 'numeric',
+				'compare' => '>'
+			);
+ 
+		// if only max price is set
+		if( isset( $_POST['price_max'] ) && $_POST['price_max'] )
+			$args['meta_query'][] = array(
+				'key' => '_price',
+				'value' => $_POST['price_max'],
+				'type' => 'numeric',
+				'compare' => '<'
+			);
+	}
+	
+	
+	$query = new WP_Query( $args );
+	$countp = $query ->found_posts;
+	global $product; 
+	echo '<div class="product d-flex flex-wrap">';
+	if( $query->have_posts() ): while( $query->have_posts() ) : $query->the_post(); ?>
+			<div class="product-items position-relative bd-fifth-1" data-id="<?php echo get_the_ID(); ?>">
+				<?php $product = wc_get_product(get_the_ID()); ?>
+				<div class="tag d-flex">
+					<?php if($product->is_on_sale()) : ?>
+						<div class="price-sale w-40 bg-secondary d-flex align-items-center justify-content-center text-light fs-12">-<?php echo percentSale($product->get_regular_price(),$product->get_sale_price()); ?>%</div>
+					<?php endif; ?>
+					<?php
+						echo hk_product_new_badge();
+					?>
+					<?php if ( ! $product->is_in_stock()) : ?>
+						<div class="stock-tag px-0h bg-six d-flex align-items-center justify-content-center text-fifth fs-12">Out of stock</div>
+					<?php endif;?>
+				</div>
+				<a class="d-block" href="<?php the_permalink(); ?>">
+					<picture class="product-image d-flex align-items-center justify-content-center">
+						<img src="<?php echo get_the_post_thumbnail_url();?>" alt="<?php the_title();?>">
+					</picture>
 				</a>
+				<div class="product-info p-2">
+					<p class="product-category text-third fs-lg-16 fw-bold text-uppercase">
+						<?php 
+							$cat = array(
+								'taxonomy'      => 'product_cat',
+								'hide_empty' => true,
+								'order'         => 'desc'
+							);
+							$categories = get_the_terms( $product->$id, 'product_cat' );
+							foreach($categories as $category) :
+						?>
+						<a href="<?php echo get_term_link($category->slug, 'product_cat'); ?>">
+							<?php 
+								echo $category->name;
+								endforeach;
+							?>
+						</a>
+					</p>
+					
+					<p class="product-title fs-lg-16 mt-0h mb-1h text-fourth"><a href="<?php the_permalink(); ?>"><?php the_title();?></a></p>
+					<p class="product-price mt-0h mb-1h text-fourth"><?php echo $product->get_price_html();?></p>
+				</div>
+				<div class="product-bottom w-100 d-flex align-item-center justify-content-end">
+					<?php
+					if ( ! wc_review_ratings_enabled() ) {
+						return;
+					}
+					$rating_count = $product->get_rating_count();
+					$review_count = $product->get_review_count();
+					$average      = $product->get_average_rating();
+
+					if ( $rating_count > 0 ) : ?>
+
+						<div class="woocommerce-product-rating">
+							<?php echo wc_get_rating_html( $average, $rating_count ); // WPCS: XSS ok. ?>
+							<?php if ( comments_open() ) : ?>
+								<?php //phpcs:disable ?>
+								<a href="#reviews" class="woocommerce-review-link" rel="nofollow">(<?php printf( _n( '%s', '%s', $review_count, 'woocommerce' ), '<span class="count">' . esc_html( $review_count ) . '</span>' ); ?>)</a>
+								<?php // phpcs:enable ?>
+							<?php endif ?>
+						</div>
+					
+					<?php endif; ?>
+					<?php echo do_shortcode('[wc_quick_buy]'); ?>
+					<a class="btn-add-cart lh-0 p-1h bd-top-fifth-1 bd-left-fifth-1 d-inline-flex align-item-center justify-content-center" href="<?php bloginfo('url') ?>?add-to-cart=<?php the_ID(); ?>">
+						<img src="<?php echo get_template_directory_uri(); ?>/common/images/bxs-cart.svg" alt="add to cart">
+					</a>
+				</div>
 			</div>
+		<?php endwhile; else : echo 'No posts found'; endif; wp_reset_query();
+	wp_reset_postdata();
+	echo '</div>';
+	if ($countp > 9): ?> <!-- Kiểm tra liệu bài viết -->
+		<script type="text/javascript">
+			$(document).ready(function(){
+				ajaxurl = '<?php echo admin_url("admin-ajax.php")?>';
+				offset = 9; // Đặt số lượng bài viết đã hiển thị ban đầu
+				$( "#loadmore" ).click(function() {
+					$('.btn-wrapper i').removeClass('d-none'); 
+					$.ajax({
+						type: "POST", //Phương thưc truyền Post
+						url: ajaxurl,
+						data:{
+							"action": "loadmore", 
+							'offset': offset, 
+						},  //Gửi các dữ liệu
+						success:function(response)
+						{
+							$('.product').append(response);
+							offset = offset + 9; //Tăng bài viết đã hiển thị lên 
+							$('.btn-wrapper i').addClass('d-none');
+							if (offset >= <?php echo $countp ?>) { 
+								$('#loadmore').addClass('hide');
+							}
+						}});
+				});
+			});
+		</script>
+		<div class="btn-wrapper d-flex align-items-center justify-content-center mt-3h">
+			<a href="javascript:;" id="loadmore" class="text-third fs-lg-16 fw-bold d-flex align-items-center text-uppercase lh-1">
+				See more <img class="w-24 d-inline-block ml-1" src="<?php echo get_template_directory_uri(); ?>/common/images/arrow.svg" alt="arrow">
+			</a>
+			<i class="fa fa-spinner fa-spin fa-fw d-none"></i>
 		</div>
-    <?php endwhile; endif; wp_reset_query();
-	die(); 
+	<?php endif;
+	die();
+}
+
+// load more products
+add_action( 'wp_ajax_nopriv_loadmore', 'prefix_load_posts' );
+add_action( 'wp_ajax_loadmore', 'prefix_load_posts' );
+function prefix_load_posts () {
+	global $product;
+	$offset = !empty($_POST['offset']) ? intval( $_POST['offset'] ) : '';
+	if ($offset) {
+		$args = array(
+			'posts_per_page'    => 9,
+			'post_type'         => 'product',
+			'offset' 			=> $offset,
+		);
+		$the_query = new WP_Query( $args );
+		if( $the_query->have_posts() ): while( $the_query->have_posts() ) : $the_query->the_post(); ?>
+			<div class="product-items position-relative bd-fifth-1" data-id="<?php echo get_the_ID(); ?>">
+				<?php $product = wc_get_product(get_the_ID()); ?>
+				<div class="tag d-flex">
+					<?php if($product->is_on_sale()) : ?>
+						<div class="price-sale w-40 bg-secondary d-flex align-items-center justify-content-center text-light fs-12">-<?php echo percentSale($product->get_regular_price(),$product->get_sale_price()); ?>%</div>
+					<?php endif; ?>
+					<?php
+						echo hk_product_new_badge();
+					?>
+					<?php if ( ! $product->is_in_stock()) : ?>
+						<div class="stock-tag px-0h bg-six d-flex align-items-center justify-content-center text-fifth fs-12">Out of stock</div>
+					<?php endif;?>
+				</div>
+				<a class="d-block" href="<?php the_permalink(); ?>">
+					<picture class="product-image d-flex align-items-center justify-content-center">
+						<img src="<?php echo get_the_post_thumbnail_url();?>" alt="<?php the_title();?>">
+					</picture>
+				</a>
+				<div class="product-info p-2">
+					<p class="product-category text-third fs-lg-16 fw-bold text-uppercase">
+						<?php 
+							$cat = array(
+								'taxonomy'      => 'product_cat',
+								'hide_empty' => true,
+								'order'         => 'desc'
+							);
+							$categories = get_the_terms( $product->$id, 'product_cat' );
+							foreach($categories as $category) :
+						?>
+						<a href="<?php echo get_term_link($category->slug, 'product_cat'); ?>">
+							<?php 
+								echo $category->name;
+								endforeach;
+							?>
+						</a>
+					</p>
+					
+					<p class="product-title fs-lg-16 mt-0h mb-1h text-fourth"><a href="<?php the_permalink(); ?>"><?php the_title();?></a></p>
+					<p class="product-price mt-0h mb-1h text-fourth"><?php echo $product->get_price_html();?></p>
+				</div>
+				<div class="product-bottom w-100 d-flex align-item-center justify-content-end">
+					<?php
+					if ( ! wc_review_ratings_enabled() ) {
+						return;
+					}
+					$rating_count = $product->get_rating_count();
+					$review_count = $product->get_review_count();
+					$average      = $product->get_average_rating();
+
+					if ( $rating_count > 0 ) : ?>
+
+						<div class="woocommerce-product-rating">
+							<?php echo wc_get_rating_html( $average, $rating_count ); // WPCS: XSS ok. ?>
+							<?php if ( comments_open() ) : ?>
+								<?php //phpcs:disable ?>
+								<a href="#reviews" class="woocommerce-review-link" rel="nofollow">(<?php printf( _n( '%s', '%s', $review_count, 'woocommerce' ), '<span class="count">' . esc_html( $review_count ) . '</span>' ); ?>)</a>
+								<?php // phpcs:enable ?>
+							<?php endif ?>
+						</div>
+					
+					<?php endif; ?>
+					<?php echo do_shortcode('[wc_quick_buy]'); ?>
+					<a class="btn-add-cart lh-0 p-1h bd-top-fifth-1 bd-left-fifth-1 d-inline-flex align-item-center justify-content-center" href="<?php bloginfo('url') ?>?add-to-cart=<?php the_ID(); ?>">
+						<img src="<?php echo get_template_directory_uri(); ?>/common/images/bxs-cart.svg" alt="add to cart">
+					</a>
+				</div>
+			</div>
+		<?php endwhile; endif; wp_reset_query();
+	}
+	die();
 }

@@ -43,6 +43,9 @@
 .bd-left-fifth-2 {
     border-left: .2rem solid $fifth;
 }
+.bd-bottom-fifth-1 {
+    border-bottom: .1rem solid $fifth;
+}
 @include lg {
     .bd-lg-none {
         border: 0;

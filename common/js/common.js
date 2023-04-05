@@ -131,30 +131,25 @@ $(document).ready(function () {
   });
 });
 
-$(document).ready(function () {
-  var offset = 5; // khái báo số lượng bài viết đã hiển thị
-  $(".load-more").click(function (event) {
+$(function ($) {
+  $("#filter").change(function () {
+    var filter = $("#filter");
     $.ajax({
-      // Hàm ajax
-      type: "post", //Phương thức truyền post hoặc get
-      dataType: "html", //Dạng dữ liệu trả về xml, json, script, or html
-      async: false,
-      url: "/wp-admin/admin-ajax.php", // Nơi xử lý dữ liệu
-      data: {
-        action: "loadmore", //Tên action, dữ liệu gởi lên cho server
-        offset: offset, // gởi số lượng bài viết đã hiển thị cho server
+      url: filter.attr("action"),
+      data: filter.serialize(), // form data
+      type: filter.attr("method"), // POST
+      beforeSend: function (xhr) {
+        //filter.find('button').text('Processing...'); // changing the button label
+        $(".product-wrap").html('<label class="alert">Processing...</label>');
       },
-      beforeSend: function () {
-        // Có thể thực hiện công việc load hình ảnh quay quay trước khi đổ dữ liệu ra
-      },
-      success: function (response) {
-        $(".product").append(response);
-        offset = offset + 5; // tăng bài viết đã hiển thị
-      },
-      error: function (jqXHR, textStatus, errorThrown) {
-        //Làm gì đó khi có lỗi xảy ra
-        console.log("The following error occured: " + textStatus, errorThrown);
+      success: function (data) {
+        // console.log(data);
+        filter.find("button").text("Apply filter"); // changing the button label back
+        $(".product-wrap").html(data); // insert data
       },
     });
+    return false;
   });
 });
+
+$(function ($) {});

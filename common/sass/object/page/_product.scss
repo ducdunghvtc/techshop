@@ -228,7 +228,9 @@
 .archive {
     .product {
         &-wrap {
-            max-width: 85rem;
+            @include lg {
+                width: calc(100% - 29rem);
+            }
         }
         &-items {
             @include lg {
@@ -238,6 +240,14 @@
     }
 }
 .side-bar {
-    width: 36.5rem;
     margin-right: 2.5rem;
+    @include lg {
+        width: 26.5rem;
+    }
+}
+.hide {
+    display: none !important;
+}
+.stock-tag {
+    height: 4rem;
 }

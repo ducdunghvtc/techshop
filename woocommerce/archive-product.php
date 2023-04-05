@@ -47,22 +47,101 @@ get_header( 'shop' );
 	do_action( 'woocommerce_archive_description' );
 	?>
 </header> -->
-<div class="container d-flex pt-8">
-	<?php
-	do_action( 'woocommerce_sidebar' );
-	?>
+<div class="container d-lg-flex pt-8">
+	<div class="side-bar mt-1h">
+
+		<form action="<?php echo site_url(); ?>/wp-admin/admin-ajax.php" method="POST" id="filter">
+			<div class='sort-by bd-bottom-fifth-1 pb-2'>
+				<p class='fw-bold mb-2 fs-lg-16'>SORT BY</p>
+				<ul class='list-style-none'>
+					<?php
+						$catalog_orderby = apply_filters( 'woocommerce_catalog_orderby', array(
+							'menu_order' => __( 'Default sorting', 'woocommerce' ),
+						
+							'popularity' => __( 'Sort by popularity', 'woocommerce' ),
+						
+							'rating'     => __( 'Sort by average rating', 'woocommerce' ),
+						
+							'date'       => __( 'Sort by latest', 'woocommerce' ),
+						
+							'price'      => __( 'Sort by price: low to high', 'woocommerce' ),
+						
+							'price-desc' => __( 'Sort by price: high to low', 'woocommerce' )
+						) );
+						if( $catalog_orderby ) : // to make it simple I use default categories
+							foreach ( $catalog_orderby as $id => $name ) :
+								echo '<li><label><input type="radio" aria-label="Shop order" name="orderby" value="' . $id  . '" class="br">' . esc_attr( $name ). '</label></li>';
+							endforeach;
+						endif;
+					?>
+				</ul>
+			</div>
+			<?php
+				$regions = get_terms( array( 'taxonomy' => 'product_cat', 'hide_empty' => 1, 'hierarchical' => 1, ) );
+				if( $regions ) {
+					echo "<div class='categories mt-2 bd-bottom-fifth-1 pb-2'><p class='fw-bold mb-2 fs-lg-16'>CATEGORIES</p><ul class='list-style-none'>";
+					foreach( $regions as $region ) {
+						if( $region->parent == 0 ) {
+						
+						echo '<li><label class="label" for="region_' . $region->term_id . '"><input type="checkbox" id="region_' . $region->term_id . '" name="region_' . $region->term_id . '" />' . $region->name . '<span class="checkmark"></span></label><span class="d-inline-block count-post">('.$region->count.')</span>';
+						foreach( $regions as $subcategory ) {
+							if($subcategory->parent == $region->term_id) {
+								echo '<ul class="ml-2 list-style-none"><li><label class="label" for="region_' . $subcategory->term_id . '"><input type="checkbox" data-parent="region_' . $region->term_id . '" id="region_' . $subcategory->term_id . '" name="region_' . $subcategory->term_id . '" />' . $subcategory->name . '<span class="checkmark"></span></label><span class="d-inline-block count-post">('.$subcategory->count.')</span></li></ul>';
+							}
+						}
+						echo '</li>';
+						
+						}
+					}
+					echo "</ul></div>";
+				}
+			?>
+			<?php
+				$colors = get_terms( array( 'taxonomy' => 'pa_colors', 'hide_empty' => 1 ) );
+				if( $colors ) {
+					echo "<div class='colors mt-2 bd-bottom-fifth-1 pb-2'><p class='fw-bold mb-2 fs-lg-16'>COLORS</p><ul class='list-style-none'>";
+					foreach( $colors as $color ) :
+						// $value = get_field( 'chose_color', 'term_' . $color->term_id );
+						echo '<li><label class="label" for="color_' . $color->term_id . '"><input type="checkbox" id="color_' . $color->term_id . '" name="color_' . $color->term_id . '" />' . $color->name . '<span class="checkmark"></span></label><span class="d-inline-block count-post">('.$color->count.')</span>';
+					endforeach;
+					echo "</ul></div>";
+				}
+			?>
+			<?php
+				$tags = get_terms( array( 'taxonomy' => 'product_tag', 'hide_empty' => 1, 'hierarchical' => 1, ) );
+				if( $tags ) {
+					echo "<div class='tags mt-2 bd-bottom-fifth-1 pb-2'><p class='fw-bold mb-2 fs-lg-16'>TAGS</p><ul class='list-style-none d-flex flex-wrap'>";
+					foreach( $tags as $tag ) {
+						if( $tag->parent == 0 ) {
+							echo '<li><input type="checkbox" id="tag_' . $tag->term_id . '" name="tag_' . $tag->term_id . '" /><span class="checkmark">' . $tag->name . '</span></li>';
+						}
+					}
+					echo "</ul></div>";
+				}
+			?>
+
+			<div class='priceFilter mt-2'>
+				<p class='fw-bold mb-2 fs-lg-16'>PRICES</p>
+				<input type="text" name="price_min" placeholder="Min price" />
+				<input type="text" name="price_max" placeholder="Max price" />
+			</div>
+					
+			<input type="hidden" name="action" value="myfilter">
+		</form>
+	</div>
 	<div class="product-wrap">
 		<div class="product d-flex flex-wrap">
 			<?php
 				$args = array(
-					'posts_per_page'    => 5,
+					'posts_per_page'    => 9,
 					'post_type'         => 'product',
 				);
 				$the_query = new WP_Query( $args );
+				$countp = $the_query ->found_posts;
 				global $product;
 			?>
 			<?php if( $the_query->have_posts() ): while( $the_query->have_posts() ) : $the_query->the_post(); ?>
-				<div class="product-items position-relative bd-fifth-1">
+				<div class="product-items position-relative bd-fifth-1" data-id="<?php echo get_the_ID(); ?>">
 					<div class="tag d-flex">
 						<?php if($product->is_on_sale()) : ?>
 							<div class="price-sale w-40 bg-secondary d-flex align-items-center justify-content-center text-light fs-12">-<?php echo percentSale($product->get_regular_price(),$product->get_sale_price()); ?>%</div>
@@ -130,8 +209,39 @@ get_header( 'shop' );
 				</div>
 			<?php endwhile; endif; wp_reset_query(); ?>
 		</div>
-		<button class="load-more">Xem thêm</button>
+		<?php if ($countp > 9): ?> <!-- Kiểm tra liệu bài viết -->
+			<script type="text/javascript">
+				$(document).ready(function(){
+					ajaxurl = '<?php echo admin_url("admin-ajax.php")?>';
+					offset = 9; // Đặt số lượng bài viết đã hiển thị ban đầu
+					$( "#loadmore" ).click(function() {
+						$('.btn-wrapper i').removeClass('d-none'); 
+						$.ajax({
+							type: "POST", //Phương thưc truyền Post
+							url: ajaxurl,
+							data:{
+								"action": "loadmore", 
+								'offset': offset, 
+							},  //Gửi các dữ liệu
+							success:function(response)
+							{
+								$('.product').append(response);
+								offset = offset + 9; //Tăng bài viết đã hiển thị lên 
+								$('.btn-wrapper i').addClass('d-none');
+								if (offset >= <?php echo $countp ?>) { 
+									$('#loadmore').addClass('hide');
+								}
+							}});
+					});
+				});
+			</script>
+			<div class="btn-wrapper d-flex align-items-center justify-content-center mt-3h">
+				<a href="javascript:;" id="loadmore" class="text-third fs-lg-16 fw-bold d-flex align-items-center text-uppercase lh-1">
+					See more <img class="w-24 d-inline-block ml-1" src="<?php echo get_template_directory_uri(); ?>/common/images/arrow.svg" alt="arrow">
+				</a>
+				<i class="fa fa-spinner fa-spin fa-fw d-none"></i>
+			</div>
+		<?php endif; ?>
 	</div>
 </main>
-<?php 
-get_footer( 'shop' );?>
+<?php get_footer( 'shop' );?>

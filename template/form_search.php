@@ -1,4 +1,4 @@
-<form action="/" method="get" class="form-search">
+<!-- <form action="/" method="get" class="form-search">
     <input type="hidden" name="post_type[]" value="post" />
     <input type="text" name="s" id="search" required value="<?php the_search_query(); ?>" />
     <button type="submit" class="btn-search">
@@ -10,4 +10,42 @@
                 z"></path>
         </svg>
     </button>
+</form> -->
+?>
+<form action="<?php echo site_url() ?>/wp-admin/admin-ajax.php" method="POST" id="filter">
+	<?php
+		$regions = get_terms( array( 'taxonomy' => 'product_cat', 'hide_empty' => 1, 'hierarchical' => 1, ) );
+		if( $regions ) {
+			echo "<div class='categories'><ul>";
+			foreach( $regions as $region ) {
+				if( $region->parent == 0 ) {
+				echo '<li><input type="checkbox" id="region_' . $region->term_id . '" name="region_' . $region->term_id . '" /><label for="region_' . $region->term_id . '">' . $region->name . '</label>';
+				foreach( $regions as $subcategory ) {
+					if($subcategory->parent == $region->term_id) {
+						echo '<ul><li><input type="checkbox" data-parent="region_' . $region->term_id . '" id="region_' . $subcategory->term_id . '" name="region_' . $subcategory->term_id . '" /><label for="region_' . $subcategory->term_id . '">' . $subcategory->name . '</label></li></ul>';
+					}
+				}
+				echo '</li>' . $region->term_id . '';
+				
+				}
+			}
+			echo "</ul></div>";
+		}
+	?>
+	<?php
+		if( $colors = get_terms( array( 'taxonomy' => 'product_attributes' ) ) ) {
+			echo "<div class='colors'>";
+			foreach( $colors as $color ) :
+				$value = get_field( 'chose_color', 'term_' . $color->term_id );
+				echo '<label><input type="checkbox" id="color_' . $color->term_id . '" name="color_' . $color->term_id . '" /><div class="colorbox" style="background:'. $value .'">'. $value .'</div><label for="color_' . $color->term_id . '">' . $color->name . '</label></label>';
+			endforeach;
+			echo "</div>";
+		}
+	?>
+	<div class='priceFilter'>
+		<input type="text" name="price_min" placeholder="Min price" />
+		<input type="text" name="price_max" placeholder="Max price" />
+	</div>
+			
+	<input type="hidden" name="action" value="myfilter">
 </form>

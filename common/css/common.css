@@ -14165,6 +14165,10 @@ button {
   border-left: 0.2rem solid #EDEEF5;
 }
 
+.bd-bottom-fifth-1 {
+  border-bottom: 0.1rem solid #EDEEF5;
+}
+
 @media (min-width: 969px) {
   .bd-lg-none {
     border: 0;
