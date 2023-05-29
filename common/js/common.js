@@ -132,24 +132,41 @@ $(document).ready(function () {
 });
 
 $(function ($) {
+  // $(".range-slider").jRange({
+  //   from: 0,
+  //   to: 100,
+  //   step: 1,
+  //   scale: [500000, 5750000, 10000000],
+  //   format: "%s",
+  //   width: 300,
+  //   showLabels: true,
+  //   isRange: true,
+  // });
   $("#filter").change(function () {
     var filter = $("#filter");
+    $(".loader").addClass("active");
     $.ajax({
       url: filter.attr("action"),
       data: filter.serialize(), // form data
       type: filter.attr("method"), // POST
-      beforeSend: function (xhr) {
-        //filter.find('button').text('Processing...'); // changing the button label
-        $(".product-wrap").html('<label class="alert">Processing...</label>');
-      },
       success: function (data) {
         // console.log(data);
-        filter.find("button").text("Apply filter"); // changing the button label back
+        // filter.find("button").text("Apply filter"); // changing the button label back
         $(".product-wrap").html(data); // insert data
+        setTimeout(function () {
+          $(".loader").removeClass("active");
+        }, 200);
       },
     });
     return false;
   });
-});
 
-$(function ($) {});
+  // var lastChecked = $("input:radio[name='orderby']").prop("checked");
+  // $("input:radio[name='orderby']").on("click", function () {
+  //   if ($(this).prop("checked") === lastChecked) {
+  //     $(this).prop("checked", false);
+  //   }
+
+  //   lastChecked = $(this).prop("checked");
+  // });
+});

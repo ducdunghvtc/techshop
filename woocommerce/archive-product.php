@@ -68,11 +68,14 @@ get_header( 'shop' );
 						
 							'price-desc' => __( 'Sort by price: high to low', 'woocommerce' )
 						) );
-						if( $catalog_orderby ) : // to make it simple I use default categories
-							foreach ( $catalog_orderby as $id => $name ) :
-								echo '<li><label><input type="radio" aria-label="Shop order" name="orderby" value="' . $id  . '" class="br">' . esc_attr( $name ). '</label></li>';
-							endforeach;
-						endif;
+						$selectedSortBy = isset( $_POST['orderby'] ) ? sanitize_text_field( $_POST['orderby'] ) : '';
+		
+						if ( $catalog_orderby ) {
+							foreach ( $catalog_orderby as $id => $name ) {
+								$checked = $selectedSortBy === $id ? 'checked' : '';
+								echo '<li><label><input type="radio" name="orderby" value="' . $id . '" class="br" ' . $checked . '>' . esc_attr( $name ) . '</label></li>';
+							}
+						}
 					?>
 				</ul>
 			</div>
@@ -215,7 +218,7 @@ get_header( 'shop' );
 					ajaxurl = '<?php echo admin_url("admin-ajax.php")?>';
 					offset = 9; // Đặt số lượng bài viết đã hiển thị ban đầu
 					$( "#loadmore" ).click(function() {
-						$('.btn-wrapper i').removeClass('d-none'); 
+						$('.loader').addClass('active');
 						$.ajax({
 							type: "POST", //Phương thưc truyền Post
 							url: ajaxurl,
@@ -226,11 +229,14 @@ get_header( 'shop' );
 							success:function(response)
 							{
 								$('.product').append(response);
-								offset = offset + 9; //Tăng bài viết đã hiển thị lên 
+								offset += offset; //Tăng bài viết đã hiển thị lên 
 								$('.btn-wrapper i').addClass('d-none');
 								if (offset >= <?php echo $countp ?>) { 
 									$('#loadmore').addClass('hide');
 								}
+								setTimeout(function(){
+									$('.loader').removeClass('active');
+								},200); 
 							}});
 					});
 				});

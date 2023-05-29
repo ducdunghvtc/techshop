@@ -14,7 +14,7 @@
 ?> 
 <main class="main page-archive mt-7 mt-md-11">
     <div class="container">
-        <div class="post equipment d-flex flex-wrap">
+        <div class="post equipment d-flex flex-wrap pt-8">
             <?php if( $the_query->have_posts() ): while( $the_query->have_posts() ) : $the_query->the_post(); ?>
                 <a class="d-flex position-relative flex-column" href="<?php the_permalink(); ?>">
                     <figure class="d-flex align-items-center justify-content-center">

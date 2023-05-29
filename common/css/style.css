@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .header {
   width: 100%;
   display: flex;
@@ -81,6 +82,11 @@
 .header .container {
   align-items: center;
 }
+@media (max-width: 968px) {
+  .header .menu-header-menu-container {
+    width: 100%;
+  }
+}
 .header-nav {
   width: 100%;
   height: 100vh;
@@ -125,13 +131,26 @@
     flex-wrap: nowrap;
   }
 }
-.header-nav .menu-item.active a {
+@media (min-width: 969px) {
+  .header-nav .menu-item {
+    padding-top: 3.05rem;
+    padding-bottom: 3.05rem;
+  }
+}
+.header-nav .menu-item.active > a {
   color: #5E72EB;
+  font-weight: 700;
 }
 .header-nav .menu-item + .menu-item {
   margin-top: 3rem;
 }
 @media (min-width: 768px) {
+  .header-nav .menu-item + .menu-item {
+    margin-left: 3rem;
+    margin-top: 0;
+  }
+}
+@media (min-width: 1200px) {
   .header-nav .menu-item + .menu-item {
     margin-left: 5rem;
     margin-top: 0;
@@ -139,168 +158,61 @@
 }
 .header-nav .menu-item a {
   font-style: normal;
-  font-weight: 400;
   font-size: 1.6rem;
   line-height: 1.9rem;
   color: #ffffff;
 }
-.header .primary-menu {
-  width: 70%;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-wrap: nowrap;
-  flex-direction: column;
-  background-color: #ffffff;
-  padding: 2.5rem 0 0;
-  transform: translateX(-100%);
-  transition: 0.3s ease-in-out;
-  z-index: 99;
+@media (min-width: 969px) {
+  .header-nav .menu-item a {
+    font-size: 1.4rem;
+  }
+}
+@media (min-width: 1200px) {
+  .header-nav .menu-item a {
+    font-size: 1.6rem;
+  }
 }
 @media (min-width: 768px) {
-  .header .primary-menu {
-    width: 100%;
-    display: flex;
-    align-items: normal;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    flex-direction: row;
-    overflow: unset;
-    background-color: transparent;
-    padding: 0;
-    transform: translateX(0);
-  }
-}
-.header .primary-menu .menu {
-  width: 100%;
-  list-style: none;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-wrap: nowrap;
-  flex-direction: column;
-}
-@media (min-width: 768px) {
-  .header .primary-menu .menu {
-    flex-direction: row;
-    margin-left: 2.1428571429vw;
-  }
-}
-@media (min-width: 1400px) {
-  .header .primary-menu .menu {
-    margin-left: 3rem;
-  }
-}
-.header .primary-menu .menu-item {
-  position: relative;
-  width: 100%;
-}
-@media (min-width: 768px) {
-  .header .primary-menu .menu-item {
-    width: auto;
-  }
-  .header .primary-menu .menu-item:not(:last-child) {
-    position: relative;
-  }
-  .header .primary-menu .menu-item:not(:last-child):before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    right: 0;
-    width: 0.1rem;
-    height: 2rem;
-    background-color: #0B0742;
-    transform: translateY(-50%);
-  }
-}
-@media (min-width: 768px) and (min-width: 768px) {
-  .header .primary-menu .menu-item:hover .sub-menu {
+  .header-nav .menu-item:hover > .sub-menu {
     top: 100%;
     opacity: 1;
     pointer-events: auto;
   }
 }
-.header .primary-menu .menu .on-sub .toggle-submenu:after {
-  transform: rotate(0) translateY(-50%);
-}
-.header .primary-menu .menu .toggle-submenu {
-  position: absolute;
-  top: 0.5rem;
-  right: 0;
-  width: 5rem;
-  height: 5rem;
-  border: 0;
-  background-color: transparent;
-}
-.header .primary-menu .menu .toggle-submenu:before, .header .primary-menu .menu .toggle-submenu:after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 1.6rem;
-  width: 1.8rem;
-  height: 0.2rem;
-  background-color: #0B0742;
-  transform: translateY(-50%);
-  transition: 0.3s ease-in-out;
-}
-.header .primary-menu .menu .toggle-submenu:after {
-  left: 1.5rem;
-  transform: rotate(90deg) translateY(-50%);
-}
-.header .primary-menu .menu a {
-  width: 100%;
-  display: inline-block;
-  padding: 1.5rem 4rem;
-  font-size: 2.2rem;
-  font-weight: 700;
-  white-space: nowrap;
-}
-@media (min-width: 768px) {
-  .header .primary-menu .menu a {
-    width: auto;
-    font-size: 1.4285714286vw;
-    padding: 0 1.7857142857vw;
-  }
-}
-@media (min-width: 1400px) {
-  .header .primary-menu .menu a {
-    font-size: 2rem;
-    padding: 0 2.5rem;
-  }
-}
-.header .primary-menu .sub-menu {
+.header-nav .sub-menu {
   display: none;
   list-style: none;
   z-index: 2;
   padding-left: 4rem;
 }
 @media (min-width: 969px) {
-  .header .primary-menu .sub-menu {
+  .header-nav .sub-menu {
     display: block;
     position: absolute;
-    top: calc(100% + 1rem);
-    left: 50%;
+    width: calc(100% + 15rem);
+    top: 100%;
+    left: 42.2%;
+    transform: translateX(-50%);
     padding: 2rem 0;
     background-color: #ffffff;
     border: solid thin #ccc;
-    transform: translateX(-50%);
     pointer-events: none;
     opacity: 0;
     transition: 0.3s ease-in-out;
   }
 }
-.header .primary-menu .sub-menu li {
+.header-nav .sub-menu li {
   white-space: nowrap;
 }
-.header .primary-menu .sub-menu li::before {
+.header-nav .sub-menu li::before {
   display: none;
 }
-.header .primary-menu .sub-menu li a {
+.header-nav .sub-menu li a {
   display: inline-block;
   padding: 1rem 2rem;
 }
 @media (min-width: 768px) {
-  .header .primary-menu .sub-menu li a {
+  .header-nav .sub-menu li a {
     min-width: 18rem;
     color: #0B0742;
     font-size: 1.4rem;
@@ -366,6 +278,62 @@
 }
 .header .header-top {
   justify-content: space-between;
+}
+
+.user {
+  position: relative;
+  width: 100%;
+}
+@media (min-width: 969px) {
+  .user {
+    width: unset;
+  }
+}
+.user-icon {
+  cursor: pointer;
+  padding-top: 2rem;
+  padding-bottom: 1rem;
+}
+.user-icon img {
+  width: 2.4rem;
+}
+@media (min-width: 969px) {
+  .user-icon {
+    padding-top: 2.6rem;
+    padding-bottom: 2.6rem;
+  }
+}
+.user:hover ul {
+  opacity: 1;
+  visibility: visible;
+  display: block;
+}
+.user ul {
+  opacity: 0;
+  display: none;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
+}
+@media (min-width: 969px) {
+  .user ul {
+    background-color: #fff;
+    width: 15rem;
+    left: 50%;
+    transform: translateX(-50%);
+    position: absolute;
+    top: 100%;
+  }
+}
+@media (min-width: 969px) {
+  .user ul li {
+    font-size: 1.6rem;
+  }
+}
+@media (max-width: 968px) {
+  .user ul li a {
+    color: #fff;
+  }
 }
 
 .footer .service-slider {
@@ -843,6 +811,117 @@ div.wpforms-container-full .wpforms-form label.wpforms-error {
   color: #fff;
 }
 
+@media (max-width: 968px) {
+  .woocommerce-product-search {
+    width: 100%;
+  }
+}
+.woocommerce-product-search input {
+  padding: 2rem 3.5rem;
+  width: 100%;
+  background: transparent;
+  border: 0.1rem solid #f5f5f5;
+  color: #fff;
+  font-size: 1.6rem;
+  position: relative;
+}
+@media (min-width: 969px) {
+  .woocommerce-product-search input {
+    padding: 3rem 4.7rem;
+    border-top: 0;
+    border-bottom: 0;
+  }
+}
+.woocommerce-product-search input::before {
+  content: "";
+  position: absolute;
+  background: url(../images/bx-search.png) left no-repeat;
+  background-size: cover;
+  width: 1.4rem;
+  height: 1.4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 2rem;
+}
+.woocommerce-product-search input:focus {
+  outline: none;
+}
+.woocommerce-product-search ::-moz-placeholder {
+  color: #2C2862;
+}
+.woocommerce-product-search ::placeholder {
+  color: #2C2862;
+}
+
+/* Định dạng tiêu đề */
+.woocommerce form.login h2,
+.woocommerce form.register h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Định dạng các trường nhập liệu */
+.woocommerce form.login input[type=text],
+.woocommerce form.login input[type=password],
+.woocommerce form.register input[type=text],
+.woocommerce form.register input[type=password] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+/* Định dạng nút "Đăng nhập" và "Đăng ký" */
+.woocommerce form.login .button,
+.woocommerce form.register .button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.woocommerce form.login .button:hover,
+.woocommerce form.register .button:hover {
+  background-color: #0056b3;
+}
+
+/* Định dạng liên kết quên mật khẩu */
+.woocommerce form.login .lost_password,
+.woocommerce form.register .lost_password {
+  display: block;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+/* Định dạng thông báo lỗi */
+.woocommerce form.login .woocommerce-error,
+.woocommerce form.register .woocommerce-error {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #f8d7da;
+  color: #721c24;
+  border-color: #f5c6cb;
+}
+
+/* Định dạng thông báo thành công */
+.woocommerce form.login .woocommerce-message,
+.woocommerce form.register .woocommerce-message {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #d4edda;
+  color: #155724;
+  border-color: #c3e6cb;
+}
+
 .modal {
   width: 100%;
   height: 100%;
@@ -958,7 +1037,6 @@ div.wpforms-container-full .wpforms-form label.wpforms-error {
   background-color: rgba(0, 0, 0, 0.8);
   z-index: 999999;
   border: none;
-  background: none;
   border-radius: 0;
 }
 .loader.active {
@@ -971,6 +1049,9 @@ div.wpforms-container-full .wpforms-form label.wpforms-error {
   width: 5rem;
   height: 5rem; /* Safari */
   animation: spin 2s linear infinite;
+}
+.loader::before {
+  background: none !important;
 }
 @keyframes spin {
   0% {
@@ -1409,6 +1490,229 @@ div.wpforms-container-full .wpforms-form label.wpforms-error {
 
 .stock-tag {
   height: 4rem;
+}
+
+.priceFilter input[type=text] {
+  padding: 0.5rem;
+  font-size: 1.4rem;
+  border: 0.1rem solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.priceFilter input[type=text]:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+/**
+ * My Account
+ */
+.woocommerce-account p.order-again {
+  text-align: right;
+}
+@media (min-width: 768px) {
+  .woocommerce-account .woocommerce-MyAccount-navigation {
+    width: 20%;
+  }
+}
+.woocommerce-account .woocommerce-MyAccount-navigation ul {
+  padding: 0;
+  border-top: 0.1rem solid #eee;
+}
+.woocommerce-account .woocommerce-MyAccount-navigation ul li {
+  list-style: none;
+  border-bottom: 0.1rem solid #eee;
+  padding-bottom: 0;
+}
+.woocommerce-account .woocommerce-MyAccount-navigation ul li.is-active {
+  font-weight: bold;
+}
+.woocommerce-account .woocommerce-MyAccount-navigation ul li a {
+  padding: 1rem 0.5rem;
+  display: block;
+}
+.woocommerce-account .woocommerce-MyAccount-content {
+  display: inline-block;
+  background-color: #fff;
+  padding: 2rem;
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
+}
+@media (min-width: 768px) {
+  .woocommerce-account .woocommerce-MyAccount-content {
+    margin-left: 5%;
+    float: left;
+    width: 75%;
+  }
+}
+.woocommerce-account .woocommerce-MyAccount-content p {
+  font-size: 1.6rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+.woocommerce-account .woocommerce-MyAccount-content h2 {
+  font-size: 2.4rem;
+  margin-bottom: 2rem;
+}
+.woocommerce-account .woocommerce-MyAccount-content a {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.woocommerce-account .woocommerce-MyAccount-content a:hover {
+  color: #0056b3;
+}
+.woocommerce-account .woocommerce-EditAccountForm input[type=submit] {
+  margin-top: 5rem;
+  float: right;
+}
+
+/* Định dạng biểu mẫu và các trường nhập liệu */
+.woocommerce-EditAccountForm {
+  margin-bottom: 2rem;
+}
+
+.woocommerce-EditAccountForm label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.woocommerce-EditAccountForm input[type=text],
+.woocommerce-EditAccountForm input[type=email],
+.woocommerce-EditAccountForm input[type=password] {
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 0.1rem solid #ccc;
+  border-radius: 0.4rem;
+  font-size: 1.6rem;
+}
+
+/* Định dạng nút cập nhật thông tin */
+.woocommerce-EditAccountForm button.button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.6rem;
+  cursor: pointer;
+  border-radius: 0.4rem;
+}
+
+.woocommerce-EditAccountForm button.button:hover {
+  background-color: #0056b3;
+}
+
+/* Định dạng thông báo thành công */
+.woocommerce-EditAccountForm .woocommerce-message {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: #d4edda;
+  color: #155724;
+  border-color: #c3e6cb;
+}
+
+/* Định dạng thông báo lỗi */
+.woocommerce-EditAccountForm .woocommerce-error {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: #f8d7da;
+  color: #721c24;
+  border-color: #f5c6cb;
+}
+
+/* Responsive CSS */
+@media screen and (max-width: 768px) {
+  /* Định dạng lại kích thước và padding cho các trường nhập liệu */
+  .woocommerce-EditAccountForm input[type=text],
+  .woocommerce-EditAccountForm input[type=email],
+  .woocommerce-EditAccountForm input[type=password] {
+    font-size: 1.4rem;
+    padding: 0.8rem;
+  }
+}
+/* Định dạng tiêu đề */
+.woocommerce-billing-fields h3 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Định dạng các trường nhập liệu */
+.woocommerce-billing-fields label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.woocommerce-billing-fields input[type=text],
+.woocommerce-billing-fields select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+/* Định dạng các thông báo lỗi */
+.woocommerce-billing-fields .woocommerce-invalid-required-field {
+  border-color: #ff0000 !important;
+}
+
+/* Định dạng nút "Xem lại giỏ hàng" */
+.woocommerce-billing-fields .wc-backward {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.6rem;
+  cursor: pointer;
+  border-radius: 0.4rem;
+  text-decoration: none;
+  display: inline-block;
+  margin-right: 1rem;
+}
+
+.woocommerce-billing-fields .wc-backward:hover {
+  background-color: #0056b3;
+}
+
+/* Định dạng nút "Tiếp tục thanh toán" */
+.woocommerce-billing-fields .button.alt {
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.6rem;
+  cursor: pointer;
+  border-radius: 0.4rem;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.woocommerce-billing-fields .button.alt:hover {
+  background-color: #218838;
+}
+
+/* Định dạng thông báo thành công */
+.woocommerce-billing-fields .woocommerce-message {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: #d4edda;
+  color: #155724;
+  border-color: #c3e6cb;
+}
+
+/* Định dạng thông báo lỗi */
+.woocommerce-billing-fields .woocommerce-error {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: #f8d7da;
+  color: #721c24;
+  border-color: #f5c6cb;
 }
 
 .equipment a {

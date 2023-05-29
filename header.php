@@ -21,7 +21,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="bg-secondary w-100 py-2">
+	<div class="bg-fourth w-100 box-shadow-black-0h py-1 py-lg-0">
 		<div class="container d-flex justify-content-center align-items-center">
 			<h1 class="header-logo">
 				<?php the_custom_logo();?>
@@ -29,10 +29,17 @@
 			</h1>
 			<div class="header-nav">
 				<?php wp_nav_menu(array("theme_location" => "primary-menu"));?>
-				<form role="search" method="get" class="woocommerce-product-search" action="<?php echo esc_url( home_url( '/' ) ); ?>">
-					<label class="screen-reader-text" for="woocommerce-product-search-field-<?php echo isset( $index ) ? absint( $index ) : 0; ?>"><?php esc_html_e( 'Search for:', 'woocommerce' ); ?></label>
-					<input type="search" id="woocommerce-product-search-field-<?php echo isset( $index ) ? absint( $index ) : 0; ?>" class="search-field" placeholder="<?php echo esc_attr__( 'Search products&hellip;', 'woocommerce' ); ?>" value="<?php echo get_search_query(); ?>" name="s" />
-					<button type="submit" value="<?php echo esc_attr_x( 'Search', 'submit button', 'woocommerce' ); ?>" class="<?php echo esc_attr( wc_wp_theme_get_element_class_name( 'button' ) ); ?>"><?php echo esc_html_x( 'Search', 'submit button', 'woocommerce' ); ?></button>
+
+				<div class="user mx-md-3 mx-xl-5">
+					<span class="user-icon d-inline-block"><img src="<?php echo get_template_directory_uri(); ?>/common/images/bxs-user.svg" alt="user"></span>
+					<ul class="list-style-none pl-3 p-lg-3">
+						<li class="mb-1 mb-lg-2"><?php personal_message_when_logged_in(); ?></li>
+						<li class="mb-1 mb-lg-0"><?php login_logout_status(); ?></li>
+					</ul>
+				</div>
+				<form role="search" method="get" class="pt-1 pt-lg-0 woocommerce-product-search" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+					<label class="screen-reader-text"><?php esc_html_e( 'Search for:', 'woocommerce' ); ?></label>
+					<input type="search" placeholder="<?php echo esc_attr__( 'Search', 'woocommerce' ); ?>" value="<?php echo get_search_query(); ?>" name="s" />
 					<input type="hidden" name="post_type" value="product" />
 				</form>
 				<div class="w-100 d-block d-md-none">
@@ -41,7 +48,7 @@
 					</div>
 				</div>
 			</div>
-			<button class="header-toggle-navi js-toggle-navi d-md-none">
+			<button class="header-toggle-navi js-toggle-navi d-lg-none">
 				<span></span>
 				<span></span>
 				<span></span>

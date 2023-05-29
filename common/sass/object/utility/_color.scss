@@ -105,27 +105,6 @@
     background-color: $light;
 }
 
-/* border */
-
-
-/* ============================================ */
-
-.border-primary {
-    border-color: $primary;
-}
-
-.border-secondary {
-    border-color: $secondary;
-}
-
-.border-third {
-    border-color: $third;
-}
-
-.border-fourth {
-    border-color: $fourth;
-}
-
-.border-base {
-    border-color: $base;
+.box-shadow-black-0h {
+    box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.05);
 }

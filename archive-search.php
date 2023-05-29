@@ -1,9 +1,8 @@
 <?php
-    get_header();
-    $s=get_search_query();
-?>
-<main class="main">
-<h2>Search Result for : <?php echo "$s"; ?> </h2>       
+    get_header(); 
+?> 
+<main class="main page-archive archive-search mt-7 mt-md-11">
+    <h2>Search Result for : <?php echo "$s"; ?> </h2>       
     <div class="product-wrap">
 		<div class="product d-flex flex-wrap">
 			<?php
@@ -114,6 +113,7 @@
 		<?php endif; ?>
 	</div>   
 </main>
+
 <?php
     get_footer();
 ?>

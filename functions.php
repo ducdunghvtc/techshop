@@ -32,7 +32,9 @@ if ( !function_exists('wp_theme_setup') ) {
 		add_theme_support( 'title-tag' );
 
 		/* Theme menu */
+
 		register_nav_menus( array(
+	    	'header-menu' => __( 'Header Menu', 'text_domain' ),
 	    	'primary-menu' => __( 'Primary Menu', 'text_domain' ),
 	    	'footer-menu'  => __( 'Footer Menu', 'text_domain' ),
 	    	'contact-header'  => __( 'Contact Header', 'text_domain' ),
@@ -254,11 +256,21 @@ function wp_style() {
 	wp_register_style( 'slick-style', get_template_directory_uri() . "/common/css/slick.css", 'all' );
 	wp_enqueue_style('slick-style');
 
+	wp_register_style( 'range-price-style', get_template_directory_uri() . "/common/css/jquery.range.css", 'all' );
+	wp_enqueue_style('range-price-style');
+
 	wp_register_script( 'jquery-3-script', "https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js", array('jquery') );
 	wp_enqueue_script('jquery-3-script');
 
 	wp_register_script( 'slick-script', get_template_directory_uri() . "/common/js/slick.min.js", array('jquery') );
 	wp_enqueue_script('slick-script');
+
+	wp_register_script( 'range-min-script', get_template_directory_uri() . "/common/js/jquery.range-min.js", array('jquery') );
+	wp_enqueue_script('range-min-script');
+
+	wp_register_script( 'range-script', get_template_directory_uri() . "/common/js/jquery.range.js", array('jquery') );
+	wp_enqueue_script('range-script');
+
 	wp_register_script( 'main-script', get_template_directory_uri() . "/common/js/common.js", array('jquery') );
 	wp_enqueue_script('main-script');
 	
@@ -288,14 +300,20 @@ function clean_custom_menu( $theme_location ) {
 		$menu_list .= '<ul class="d-flex flex-wrap align-items-md-center list-style-none flex-column flex-md-row">' ."\n";
 	
 			
-		foreach( $menu_items as $menu_item ) {
+		foreach ($menu_items as $menu_item) {
 			$link = $menu_item->url;
 			$title = $menu_item->title;
 			$menu_list .= '<li class="fs-12 fs-lg-14 text-secondary my-1h my-md-0">';
-			$menu_list .= '<a class="d-flex align-items-start align-items-md-center fs-12 fs-lg-14 text-secondary" target="_blank" href="'.$link.'" ><img src="'.get_field('icon', $menu_item->ID).'">'.$title.'</a>';
+			$menu_list .= '<a class="d-flex align-items-start align-items-md-center fs-12 fs-lg-14 text-secondary" target="_blank" href="'.$link.'">';
+		
+			if (get_field('icon', $menu_item->ID)) {
+				$menu_list .= '<img src="'.get_field('icon', $menu_item->ID).'">';
+			}
+		
+			$menu_list .= $title.'</a>';
 			$menu_list .= '</li>';
-			
 		}
+		
 		
 		$menu_list .= '</ul></nav>' ."\n";
 		
@@ -456,17 +474,16 @@ add_filter( 'use_widgets_block_editor', '__return_false' );
 
 // filter products
 
-add_action('wp_ajax_myfilter', 'saan_filter_function'); // wp_ajax_{ACTION HERE} 
-add_action('wp_ajax_nopriv_myfilter', 'saan_filter_function');
+add_action('wp_ajax_myfilter', 'filter_products'); // wp_ajax_{ACTION HERE} 
+add_action('wp_ajax_nopriv_myfilter', 'filter_products');
 
-function saan_filter_function(){
+function filter_products(){
 	//wp_quick_view();
 	$args = array(
 		'post_type' => 'product',
 		'posts_per_page' => 9,
 	);
 
-	$choices = $_POST['choices'];
 	$args['tax_query'] = array( 'relation' => 'AND' );
 	$all_terms = array();
 	$all_tags = array();
@@ -477,13 +494,26 @@ function saan_filter_function(){
 	$tags = get_terms( array( 'taxonomy' => 'product_tag' ) );
 	
 
-	foreach($choices as $key => $value){
+	$selectedSortBy = $_POST['orderby'];
 
-		if(count($value)){
-			foreach ($value as $inKey => $inValue) {
-				$args[] = array( 'key' => $key, 'value' => $inValue, 'compare' => '=' );
-			}
-		}
+	if ($selectedSortBy == 'popularity') {
+		$args['orderby'] = 'popularity';
+	} elseif ($selectedSortBy == 'rating') {
+		$args['orderby'] = 'meta_value_num';
+		$args['meta_key'] = '_wc_average_rating';
+		$args['order'] = 'DESC';
+	} elseif ($selectedSortBy == 'date') {
+		$args['orderby'] = 'date';
+	} elseif ($selectedSortBy == 'price') {
+		$args['orderby'] = 'meta_value_num';
+		$args['meta_key'] = '_price';
+		$args['order'] = 'ASC';
+	} elseif ($selectedSortBy == 'price-desc') {
+		$args['orderby'] = 'meta_value_num';
+		$args['meta_key'] = '_price';
+		$args['order'] = 'DESC';
+	} else {
+		$args['orderby'] = 'menu_order';
 	}
 
 	// for taxonomies / categories
@@ -667,24 +697,36 @@ function saan_filter_function(){
 		<script type="text/javascript">
 			$(document).ready(function(){
 				ajaxurl = '<?php echo admin_url("admin-ajax.php")?>';
-				offset = 9; // Đặt số lượng bài viết đã hiển thị ban đầu
+				var offset = 9; // Đặt số lượng bài viết đã hiển thị ban đầu
+				var sortValue = $('#filter').find('input[name="orderby"]:checked').val();
+				var priceMin = $('input[name="price_min"]').val();
+    			var priceMax = $('input[name="price_max"]').val();
 				$( "#loadmore" ).click(function() {
-					$('.btn-wrapper i').removeClass('d-none'); 
+					$('.loader').addClass('active');
 					$.ajax({
 						type: "POST", //Phương thưc truyền Post
 						url: ajaxurl,
 						data:{
 							"action": "loadmore", 
 							'offset': offset, 
+							'orderby': sortValue,
+							'all_terms': '<?php echo json_encode($all_terms); ?>',
+                    		'all_colors': '<?php echo json_encode($all_colors); ?>',
+                    		'all_tags': '<?php echo json_encode($all_tags); ?>',
+							'price_min': priceMin,
+                			'price_max': priceMax
 						},  //Gửi các dữ liệu
 						success:function(response)
 						{
 							$('.product').append(response);
-							offset = offset + 9; //Tăng bài viết đã hiển thị lên 
+							offset += offset; //Tăng bài viết đã hiển thị lên 
 							$('.btn-wrapper i').addClass('d-none');
 							if (offset >= <?php echo $countp ?>) { 
 								$('#loadmore').addClass('hide');
 							}
+							setTimeout(function(){
+								$('.loader').removeClass('active');
+							},200); 
 						}});
 				});
 			});
@@ -700,17 +742,98 @@ function saan_filter_function(){
 }
 
 // load more products
-add_action( 'wp_ajax_nopriv_loadmore', 'prefix_load_posts' );
-add_action( 'wp_ajax_loadmore', 'prefix_load_posts' );
-function prefix_load_posts () {
+
+add_action( 'wp_ajax_nopriv_loadmore', 'filter_load_posts' );
+add_action( 'wp_ajax_loadmore', 'filter_load_posts' );
+function filter_load_posts () {
 	global $product;
 	$offset = !empty($_POST['offset']) ? intval( $_POST['offset'] ) : '';
-	if ($offset) {
+	$selectedSortBy = $_POST['orderby'];
+	$all_terms = json_decode(stripslashes($_POST['all_terms']), true);
+    $all_colors = json_decode(stripslashes($_POST['all_colors']), true);
+    $all_tags = json_decode(stripslashes($_POST['all_tags']), true);
+	$price_min = isset($_POST['price_min']) ? floatval($_POST['price_min']) : null;
+	$price_max = isset($_POST['price_max']) ? floatval($_POST['price_max']) : null;
+
+	if ($offset ) {
 		$args = array(
-			'posts_per_page'    => 9,
-			'post_type'         => 'product',
-			'offset' 			=> $offset,
+			'posts_per_page' => 9,
+			'post_type' => 'product',
+			'offset' => $offset,
 		);
+
+		if ($selectedSortBy == 'popularity') {
+			$args['orderby'] = 'popularity';
+		} elseif ($selectedSortBy == 'rating') {
+			$args['orderby'] = 'meta_value_num';
+			$args['meta_key'] = '_wc_average_rating';
+			$args['order'] = 'DESC';
+		} elseif ($selectedSortBy == 'date') {
+			$args['orderby'] = 'date';
+		} elseif ($selectedSortBy == 'price') {
+			$args['orderby'] = 'meta_value_num';
+			$args['meta_key'] = '_price';
+			$args['order'] = 'ASC';
+		} elseif ($selectedSortBy == 'price-desc') {
+			$args['orderby'] = 'meta_value_num';
+			$args['meta_key'] = '_price';
+			$args['order'] = 'DESC';
+		} else {
+			$args['orderby'] = 'menu_order';
+		}
+
+		if (!empty($all_terms)) {
+			$args['tax_query'][] = array(
+				array(
+					'taxonomy' => 'product_cat',
+					'field' => 'id',
+					'terms' => $all_terms,
+				),
+			);
+		}
+	
+		if (!empty($all_colors)) {
+			$args['tax_query'][] = array(
+				array(
+					'taxonomy' => 'pa_colors',
+					'field' => 'id',
+					'terms' => $all_colors,
+				),
+			);
+		}
+
+		if (!empty($all_tags)) {
+			$args['tax_query'][] = array(
+				array(
+					'taxonomy' => 'product_tag',
+					'field' => 'id',
+					'terms' => $all_tags,
+				),
+			);
+		}
+		if (!empty($price_min) && !empty($price_max)) {
+			$args['meta_query'][] = array(
+				'key' => '_price',
+				'value' => array($price_min, $price_max),
+				'type' => 'numeric',
+				'compare' => 'BETWEEN'
+			);
+		} elseif (!empty($price_min)) {
+			$args['meta_query'][] = array(
+				'key' => '_price',
+				'value' => $price_min,
+				'type' => 'numeric',
+				'compare' => '>'
+			);
+		} elseif (!empty($price_max)) {
+			$args['meta_query'][] = array(
+				'key' => '_price',
+				'value' => $price_max,
+				'type' => 'numeric',
+				'compare' => '<'
+			);
+		}
+
 		$the_query = new WP_Query( $args );
 		if( $the_query->have_posts() ): while( $the_query->have_posts() ) : $the_query->the_post(); ?>
 			<div class="product-items position-relative bd-fifth-1" data-id="<?php echo get_the_ID(); ?>">
@@ -784,3 +907,44 @@ function prefix_load_posts () {
 	}
 	die();
 }
+
+// custom search products
+
+function template_chooser($template)   
+{    
+  global $wp_query;   
+  $post_type = get_query_var('post_type');   
+  if( $wp_query->is_search && $post_type == 'product' )   
+  {
+    return locate_template('search.php');  //  redirect to archive-search.php
+  }   
+  return $template;   
+}
+add_filter('template_include', 'template_chooser');
+
+
+function personal_message_when_logged_in() {
+
+    if ( is_user_logged_in() ) {
+        $current_user = wp_get_current_user();
+		$items .= '<a href="' . get_permalink( wc_get_page_id( 'myaccount' ) ) . '">'. $current_user->user_login .'</a>';
+		echo $items;
+    } else {
+    	$items .= '<a href="' . get_permalink( wc_get_page_id( 'myaccount' ) ) . '">Register</a>';
+        echo $items;
+    }
+
+}
+
+
+function login_logout_status() {
+    if ( is_user_logged_in() ) {
+		$login_status .= '<a href="/my-account/customer-logout/">Log out</a>';
+		echo $login_status;
+    } else {
+    	$items .= '<a href="' . get_permalink( wc_get_page_id( 'myaccount' ) ) . '">Log in</a>';
+        echo $items;
+    }
+}
+
+
